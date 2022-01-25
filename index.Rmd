@@ -83,5 +83,5 @@ dygraph(q_xts, main = "Discharge of Poudre") %>%
 - The main fish that inhabits in the Poudre is Brown trout that is non-native fish. 
   [Poudre fishing report](https://troutunderground.com/Cache-La-Poudre-River-Fishing-Report/)
   
-- One of the most fun things to do in Pudre is rafting along the rough rivers in summer. **Have some cool fun this summer**
+- One of the most fun things to do in Poudre is rafting along the rough rivers in summer. **Have some cool fun this summer**
 ![](https://www.awanderlustadventure.com/wordpress/wp-content/uploads/2015/01/DSC0253.jpg)
