@@ -1,6 +1,6 @@
 ---
-title: "Discharge Data Example"
-author: "Matthew Ross"
+title: "Assignment-1: Discharge of Poudre River"
+author: "AJ Lee"
 date: "1/24/2022"
 output:
   html_document:
@@ -18,27 +18,19 @@ library(xts)
 ```
 
 
-# Methods
+# Poudre River Overview
 
-The Poudre River at Lincoln Bridge is:
-
-  - Downstream of only a little bit of urban stormwater
-
-  - Near Odell Brewing CO
-  
-  - Near an open space area and the Poudre River Trail
-  
-  - **Downstream of many agricultral diversions**
+The Poudre River is the main source of water for Fort Collins, where it flows from the peaks of the Rocky Mountains into the vast plains.
 
 
 ## SiteDescription
 
-![](https://waterdata.usgs.gov/nwisweb/local/state/co/text/pics/06752260big.jpg)
+![](https://i0.wp.com/coyotegulch.blog/wp-content/uploads/2011/02/cachelapoudreriver.jpg)
 
 
 ## Data Acquisition and Plotting tests
 
-## Data Download
+### Data Download
 
 
 ```{r downloader}
@@ -49,12 +41,11 @@ q <- readNWISdv(siteNumbers = '06752260',
                 endDate = '2022-01-01') %>%
   rename(q = 'X_00060_00003')
 
-
 ```
 
 
 
-## Static Data Plotter
+### Static Data Plotter
 
 
 ```{r, warning = FALSE, fig.width = 8, fig.height = 5}
@@ -67,60 +58,30 @@ ggplot(q, aes(x = Date, y = q)) +
 ```
 
 
-## Interactive Data Plotter
-
+### Interactive Data Plotter 
 
 ```{r}
 
 q_xts <- xts(q$q, order.by = q$Date)
 
+dygraph(q_xts, main = "Discharge of Poudre") %>%
+  dyOptions(fillGraph = TRUE, fillAlpha = 0.5, drawPoints = TRUE, pointSize = 2) %>%
+  dySeries("V1", label = "Discharge(cfs)") %>%
+  dyLegend(show = "always", hideOnMouseOut = FALSE)
 
-dygraph(q_xts) %>%
-  dyAxis("y", label = "Discharge (cfs)") 
 ```
 
 
+## The charateristics of Poudre River
 
-# Assignment. 
+**The Poudre River has several characteristics as below:**
 
+- The Poudre river tends to decrease its discharge over time. This is probably seemed due to less snow, a major water resource of the Poudre.
+  *Is it the impact of climate change?*
+[climate change impact](https://www.colorado.edu/ecenter/energy-climate-justice/general-energy-climate-info/climate-change/impacts-colorado)
 
-This assignment will be primarily about demonstrating some expertice in using
-RMarkdown, since we will be using Rmds as the primary form of homework and 
-assignments. With that in mind, your assignment for this homework is to:
-
-
-1) Fork the example repository into your personal GitHub
-
-2) Create an RStudio project from your Personal clone of the Repo. 
-
-3) Create a table of contents that is floating, but displays three levels of
-headers instead of two (by editing the content at the beginning of the document)
-
-4) Make a version of the `dygraph` with points and lines by using rstudio's
-dygraph [guide](https://rstudio.github.io/dygraphs/)
-
-5) Writing a paragraph on the Poudre river with at least three hyperlinks,
-**two bolded sections**, and one *italicized phrase*. The content of this paragraph
-is not vital, but try to at least make it true and interesting, and, of course,
-don't plagiarize. 
-
-6) Knit that document, and then git commit and push to your personal GitHub.
-
-7) Use the GitHub -> Settings -> Pages tab to create a website of your report.
-
-8) Bonus, make the timestamp in the header dynamic. As in it only adds
-todays date, not just a static date you enter. 
-
-9) Bonus, create an "index_talk.Rmd" version of your document using the
-`revealjs` package. Add link to your original report-style document. 
-
-
-
-
-## DyGraph example. 
-
-
-## Poudre Paragraph
-
-
-
+- The main fish that inhabits in the Poudre is Brown trout that is non-native fish. 
+  [Poudre fishing report](https://troutunderground.com/Cache-La-Poudre-River-Fishing-Report/)
+  
+- One of the most fun things to do in Pudre is rafting along the rough rivers in summer. **Have some cool fun this summer**
+![](https://www.awanderlustadventure.com/wordpress/wp-content/uploads/2015/01/DSC0253.jpg)
