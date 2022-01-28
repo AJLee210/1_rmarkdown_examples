@@ -1,7 +1,7 @@
 ---
 title: "Assignment-1: Discharge of Poudre River"
 author: "AJ Lee"
-date: "1/24/2022"
+date: "1/27/2022"
 output:
   html_document:
     toc: true
@@ -20,10 +20,10 @@ library(xts)
 
 # Poudre River Overview
 
-The Poudre River is the main source of water for Fort Collins, where it flows from the peaks of the Rocky Mountains into the vast plains.
+The Poudre River is the main source of water for Fort Collins, flowing from the peaks of the Rocky Mountains into the western vast plains. The river travels through a variety of terrain, exhibiting ever-changing quantities that change with the seasons. **By observing the discharge of the Poudre River, I want to understand the characteristics of the river.**
 
 
-## SiteDescription
+## Site
 
 ![](https://i0.wp.com/coyotegulch.blog/wp-content/uploads/2011/02/cachelapoudreriver.jpg)
 
@@ -32,28 +32,24 @@ The Poudre River is the main source of water for Fort Collins, where it flows fr
 
 ### Data Download
 
+I collect water discharge data upstream and downstream of Poudre by using NWIS dataset. 
 
 ```{r downloader}
 
-q <- readNWISdv(siteNumbers = '06752260',
+Up <- readNWISdv(siteNumbers = '06752260',
                 parameterCd = '00060',
                 startDate = '2017-01-01',
-                endDate = '2022-01-01') %>%
-  rename(q = 'X_00060_00003')
-
-```
+                endDate = '2020-01-01') %>%
+  rename(Q_up = 'X_00060_00003')
 
 
+Down <- readNWISdv(siteNumbers = '06752280',
+                parameterCd = '00060',
+                startDate = '2017-01-01',
+                endDate = '2020-01-01') %>%
+  rename(Q_down = 'X_00060_00003') 
 
-### Static Data Plotter
-
-
-```{r, warning = FALSE, fig.width = 8, fig.height = 5}
-
-ggplot(q, aes(x = Date, y = q)) + 
-  geom_line() + 
-  ylab('Q (cfs)') + 
-  ggtitle('Discharge in the Poudre River, Fort Collins')
+River <- merge (Up, Down, by='Date')
 
 ```
 
@@ -62,26 +58,31 @@ ggplot(q, aes(x = Date, y = q)) +
 
 ```{r}
 
-q_xts <- xts(q$q, order.by = q$Date)
-
-dygraph(q_xts, main = "Discharge of Poudre") %>%
-  dyOptions(fillGraph = TRUE, fillAlpha = 0.5, drawPoints = TRUE, pointSize = 2) %>%
-  dySeries("V1", label = "Discharge(cfs)") %>%
+Up_xts <- xts(River$Q_up, order.by = River$Date)
+Down_xts <- xts(River$Q_down, order.by = River$Date)
+Discharge <- cbind(Up_xts, Down_xts)
+dygraph(Discharge, main = "Discharge of Poudre") %>%
+  dySeries("Up_xts", label = "Upstream(cfs)") %>%
+  dySeries("Down_xts", label = "Downstream(cfs)") %>%
   dyLegend(show = "always", hideOnMouseOut = FALSE)
+
+
 
 ```
 
 
-## The charateristics of Poudre River
+## Conclusions
 
 **The Poudre River has several characteristics as below:**
 
 - The Poudre river tends to decrease its discharge over time. This is probably seemed due to less snow, a major water resource of the Poudre.
-  *Is it the impact of climate change?*
+  **Is it the impact of climate change?**
 [climate change impact](https://www.colorado.edu/ecenter/energy-climate-justice/general-energy-climate-info/climate-change/impacts-colorado)
 
-- The main fish that inhabits in the Poudre is Brown trout that is non-native fish. 
-  [Poudre fishing report](https://troutunderground.com/Cache-La-Poudre-River-Fishing-Report/)
+- *The Flow tends to decrease as going downstream. This is believed to be due to either a runoff of water for cultivating nearby agricultural land or a sharply reduced flow rate as it approaches the plains.*
+
+- Do you know that the main fish that inhabits in the Poudre is Brown trout that is non-native fish?
+ [Poudre fishing report](https://troutunderground.com/Cache-La-Poudre-River-Fishing-Report/)
   
-- One of the most fun things to do in Poudre is rafting along the rough rivers in summer. **Have some cool fun this summer**
+- Finally, I think one of the most fun things to do in Poudre is rafting along the rough rivers in summer. If you do not yet, try it this summer. **Have some cool fun in Poudre**
 ![](https://www.awanderlustadventure.com/wordpress/wp-content/uploads/2015/01/DSC0253.jpg)
